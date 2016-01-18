@@ -77,6 +77,7 @@ manager.register("RedDriveFinalSensor",RedDriveFinalSensor.class);
       manager.register("winchCode", winchCode.class);
 //manager.register("TouchSensorDrive", TouchSensorDrive.class);
 manager.register("MRRGBExample",MRRGBExample.class);
+      manager.register("AutonomousRed",AutonomousRed.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
