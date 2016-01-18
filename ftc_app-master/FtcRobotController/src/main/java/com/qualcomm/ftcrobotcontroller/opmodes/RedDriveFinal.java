@@ -57,14 +57,20 @@ public class RedDriveFinal extends OpMode {
     Servo rightmidservo;
     Servo leftmidservo;
     Servo gripper;
+	Servo winch;
+
+	double servoposition = .75;
+	double rightmidposition = 0;
+	double leftmidpostition = 0;
 	double rightbaseposition = 0;
 	double leftbaseposition = 0;
-    double rightmidposition = 0;
-    double leftmidpostition = 0;
+    double servoSpeed = .005;
+	double clipmin = 0;
+	double clipmax = 1;
 	int calls = 0;
 
 
-    double servoposition = .75;
+
 
 	/**
 	 * Constructor
@@ -91,8 +97,8 @@ public class RedDriveFinal extends OpMode {
         motorBackLeft = hardwareMap.dcMotor.get("backleft"); //port2 left11a
         motorBackRight = hardwareMap.dcMotor.get("backright"); //port2 right
 
-        motorFrontLeft.setDirection(DcMotor.Direction.REVERSE);
-        motorBackLeft.setDirection(DcMotor.Direction.REVERSE);
+        motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
+        motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
 
 
@@ -102,9 +108,13 @@ public class RedDriveFinal extends OpMode {
         leftmidservo = hardwareMap.servo.get("leftmid"); //port5
         gripper = hardwareMap.servo.get("gripper"); //port2
 
+
         leftmidservo.setDirection(Servo.Direction.REVERSE);
-		leftbaseservo.setDirection(Servo.Direction.REVERSE);
+		rightbaseservo.setDirection(Servo.Direction.REVERSE);
 		calls=0;
+		winch = hardwareMap.servo.get("winch");
+
+		winch.setPosition(0.5);
 
 
 
@@ -131,17 +141,23 @@ public class RedDriveFinal extends OpMode {
 		// 1 is full down
 		// direction: left_stick_x ranges from -1 to 1, where -1 is full left
 		// and 1 is full right
+
+		controlMotors();
+		controlArmBase();
+		controlArmMid();
+		controlGripper();
+		controlWinch();
+		calls++;
+	}
+
+	public void controlMotors()
+	{
 		double throttle = -gamepad1.left_stick_y;
 		double direction = gamepad1.right_stick_x;
 		double right = throttle - direction;
 		double left = throttle + direction;
-
-		// clip the right/left values so that the values never exceed +/- 1
 		right = Range.clip(right, -1, 1);
 		left = Range.clip(left, -1, 1);
-
-		// scale the joystick value to make it easier to control
-		// the robot more precisely at slower speeds.
 		right = scaleInput(right);
 		left = scaleInput(left);
 
@@ -150,114 +166,129 @@ public class RedDriveFinal extends OpMode {
 		motorFrontLeft.setPower(left);
 		motorBackLeft.setPower(left);
 		motorBackRight.setPower(right);
+		//telemetry.addData("Text", "*** Robot Data***");
+		//telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
+		//telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
+	}
 
+	public void controlArmBase() {
 
-
-
-		/*
-		 * Send telemetry data back to driver station. Note that if we are using
-		 * a legacy NXT-compatible motor controller, then the getPower() method
-		 * will return a null value. The legacy NXT-compatible motor controllers
-		 * are currently write only.
-		 */
-		telemetry.addData("Text", "*** Robot Data***");
-		telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
-		telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
-		calls++;
-
-		// update the position of the arm.
-		if (gamepad2.a) {
+		if (gamepad2.left_stick_y > 0) {
 			// if the A button is pushed on gamepad1, increment the position of
 			// the arm servo.
-			rightbaseposition += 0.001;
-			rightbaseposition = Range.clip(rightbaseposition, 0.1, 0.99);
+			rightbaseposition += servoSpeed;
+			rightbaseposition = Range.clip(rightbaseposition, 0.0, 1);
 			rightbaseservo.setPosition(rightbaseposition);
-			telemetry.addData("setting servo rightbase to " + rightbaseposition, calls);
+
 			//value when servo_1 is vertical--0.708
 			//value when servo_1 is parallel to the ground--0.15
-			leftbaseposition += 0.001;
-			leftbaseposition = Range.clip(leftbaseposition, 0.1, 0.99);
+			leftbaseposition += servoSpeed;
+			leftbaseposition = Range.clip(leftbaseposition, 0.0, 1);
 			leftbaseservo.setPosition(leftbaseposition);
-			telemetry.addData("setting servo leftbase to " + leftbaseposition, calls);
 
-		}
 
-		if (gamepad2.x) {
+		}telemetry.addData("setting servo rightbase to " + rightbaseposition, calls);
+		telemetry.addData("setting servo leftbase to " + leftbaseposition, calls);
+		if (gamepad2.left_stick_y < 0) {
 			// if the Y button is pushed on gamepad1, decrease the position of
 			// the arm servo.
-			leftbaseposition -= 0.001;
-			leftbaseposition = Range.clip(leftbaseposition, 0.1, 0.99);
+			leftbaseposition -= servoSpeed;
+			leftbaseposition = Range.clip(leftbaseposition, clipmin	, clipmax);
 			leftbaseservo.setPosition(leftbaseposition);
-			telemetry.addData("setting servo leftbase to " + leftbaseposition, calls);
+
 			//leftposition += 0.001;
-			//leftposition = Range.clip(leftposition, 0.1, 0.99);
+			//leftposition = Range.clip(leftposition, 0.0, 1);
 			//left.setPosition(leftposition);
 			//telemetry.addData("setting servo_6, left servo to " + leftposition, calls);
 			//value when servo_6 is completely vertical--0.737
 			//value when servo_6 is parallel to the ground--0.137
-			rightbaseposition -= 0.001;
-			rightbaseposition = Range.clip(rightbaseposition, 0.1, 0.99);
+			rightbaseposition -= servoSpeed;
+			rightbaseposition = Range.clip(rightbaseposition, clipmin, clipmax);
 			rightbaseservo.setPosition(rightbaseposition);
-			telemetry.addData("setting servo rightbase to " + rightbaseposition, calls);
-
-		}
-        if (gamepad2.b) {
-            // if the A button is pushed on gamepad1, increment the position of
-            // the arm servo.
-            rightmidposition += 0.001;
-            rightmidposition = Range.clip(rightmidposition, 0.1, 0.99);
-            rightmidservo.setPosition(rightmidposition);
-            telemetry.addData("setting servo rightmid to " + rightmidposition, calls);
-            //value when servo_1 is vertical--0.708
-            //value when servo_1 is parallel to the ground--0.15
-            leftmidpostition += 0.001;
-            leftmidpostition = Range.clip(leftmidpostition, 0.1, 0.99);
-            leftmidservo.setPosition(leftmidpostition);
-            telemetry.addData("setting servo leftmid to " + leftmidpostition, calls);
-
-        }
-
-        if (gamepad2.y) {
-            // if the Y button is pushed on gamepad1, decrease the position of
-            // the arm servo.
-            leftmidpostition -= 0.001;
-            leftmidpostition = Range.clip(leftmidpostition, 0.1, 0.99);
-            leftmidservo.setPosition(leftmidpostition);
-            telemetry.addData("setting servo leftmid to " + leftmidpostition, calls);
-            //leftposition += 0.001;
-            //leftposition = Range.clip(leftposition, 0.1, 0.99);
-            //left.setPosition(leftposition);
-            //telemetry.addData("setting servo_6, left servo to " + leftposition, calls);
-            //value when servo_6 is completely vertical--0.737
-            //value when servo_6 is parallel to the ground--0.137
-            rightmidposition -= 0.001;
-            rightmidposition = Range.clip(rightmidposition, 0.1, 0.99);
-            rightmidservo.setPosition(rightmidposition);
-            telemetry.addData("setting servo rightmid to " + rightmidposition, calls);
-
-        }
-
-        if (gamepad2.left_bumper) {
-            // if the A button is pushed on gamepad1, increment the position of
-            // the arm servo.
-            servoposition += 0.001;
-            servoposition = Range.clip(servoposition, 0.6, 0.95);
-            gripper.setPosition(servoposition);
-            telemetry.addData("setting gripper to " + servoposition , calls);
-            //value when servo_1 is vertical--0.708
-            //value when servo_1 is parallel to the ground--0.15
 
 
-        }
-
-        if (gamepad2.right_bumper) {
-            // if the Y button is pushed on gamepad1, decrease the position of
-            // the arm servo.
-            servoposition -= 0.001;
-            servoposition = Range.clip(servoposition, 0.6, 0.95);
-            gripper.setPosition(servoposition);
-            telemetry.addData("setting gripper to " + servoposition, calls);}
+		}telemetry.addData("setting servo leftbase to " + leftbaseposition, calls);
+		telemetry.addData("setting servo rightbase to " + rightbaseposition, calls);
 	}
+
+	public void controlArmMid() {
+
+		if (gamepad2.right_stick_x > 0) {
+			// if the A button is pushed on gamepad1, increment the position of
+			// the arm servo.
+			rightmidposition += servoSpeed;
+			rightmidposition = Range.clip(rightmidposition, clipmin, clipmax);
+			rightmidservo.setPosition(rightmidposition);
+
+			//value when servo_1 is vertical--0.708
+			//value when servo_1 is parallel to the ground--0.15
+			leftmidpostition += servoSpeed;
+			leftmidpostition = Range.clip(leftmidpostition, clipmin, clipmax);
+			leftmidservo.setPosition(leftmidpostition);
+
+
+		}telemetry.addData("setting servo rightmid to " + rightmidposition, calls);
+		telemetry.addData("setting servo leftmid to " + leftmidpostition, calls);
+		if (gamepad2.right_stick_y < 0) {
+			// if the Y button is pushed on gamepad1, decrease the position of
+			// the arm servo.
+			leftmidpostition -= servoSpeed;
+			leftmidpostition = Range.clip(leftmidpostition, clipmin, clipmax);
+			leftmidservo.setPosition(leftmidpostition);
+
+
+			rightmidposition -= servoSpeed;
+			rightmidposition = Range.clip(rightmidposition, clipmin, clipmax);
+			rightmidservo.setPosition(rightmidposition);
+
+
+		} telemetry.addData("setting servo leftmid to " + leftmidpostition, calls);
+		telemetry.addData("setting servo rightmid to " + rightmidposition, calls);
+	}
+
+	public void controlGripper() {
+
+		if (gamepad2.left_bumper) {
+			// if the A button is pushed on gamepad1, increment the position of
+			// the arm servo.
+			servoposition += 0.001;
+			servoposition = Range.clip(servoposition, 0.6, 0.95);
+			gripper.setPosition(servoposition);
+
+			//value when servo_1 is vertical--0.708
+			//value when servo_1 is parallel to the ground--0.15
+
+
+		}telemetry.addData("setting gripper to " + servoposition , calls);
+
+
+
+
+		if (gamepad2.right_bumper) {
+			// if the Y button is pushed on gamepad1, decrease the position of
+			// the arm servo.
+			servoposition -= 0.001;
+			servoposition = Range.clip(servoposition, 0.6, 0.95);
+			gripper.setPosition(servoposition);
+
+		}telemetry.addData("setting gripper to " + servoposition, calls);
+	}
+
+	public void controlWinch() {
+		double throttlewinch = -gamepad2.left_stick_y;
+		double winchpower = (throttlewinch/2) + .5;
+
+		winchpower = Range.clip(winchpower,clipmin,clipmax);
+		winch.setPosition(winchpower);
+		telemetry.addData("servo power: ",winchpower);
+		telemetry.addData("throttle: ",throttlewinch);
+	}
+
+
+
+
+
+
 
 	/*
 	 * Code to run when the op mode is first disabled goes here
