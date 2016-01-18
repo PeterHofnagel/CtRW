@@ -33,6 +33,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpModeManager;
 import com.qualcomm.robotcore.eventloop.opmode.OpModeRegister;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 
 /**
  * Register Op Modes
@@ -58,27 +59,29 @@ public class FtcOpModeRegister implements OpModeRegister {
     manager.register("NullOp", NullOp.class);
 
     //manager.register("MatrixK9TeleOp", MatrixK9TeleOp.class);
-    manager.register("K9TeleOp", K9TeleOp.class);
-    manager.register("K9Line", K9Line.class);
-    manager.register ("PushBotAuto", PushBotAuto.class);
-    manager.register ("PushBotManual", PushBotManual.class);
-    manager.register("DriveRedWire", DriveRedWire.class);
-    manager.register("DriveRedWire2",DriveRedWire2.class);
+    //manager.register("K9TeleOp", K9TeleOp.class);
+    //manager.register("K9Line", K9Line.class);
+    //manager.register ("PushBotAuto", PushBotAuto.class);
+    //manager.register ("PushBotManual", PushBotManual.class);
+    //manager.register("DriveRedWire", DriveRedWire.class);
+    //manager.register("DriveRedWire2",DriveRedWire2.class);
 
-    manager.register("RedDrive", RedDrive.class);
+    //manager.register("RedDrive", RedDrive.class);
     manager.register("RedDriveFinal", RedDriveFinal.class);
-    manager.register("RedHalfDrive", RedHalfDrive.class);
-    manager.register("RedDriveFinal2",RedDriveFinal2.class);
-
-    manager.register("RedServoTest2", RedServoTest2.class);
-    manager.register("RedServoGripperTest",RedServoGripperTest.class);
-
-
+    //manager.register("RedHalfDrive", RedHalfDrive.class);
+    //manager.register("RedDriveFinal2",RedDriveFinal2.class);
+manager.register("RedDriveFinalSensor",RedDriveFinalSensor.class);
+    //manager.register("RedServoTest2", RedServoTest2.class);
+    //manager.register("RedServoGripperTest",RedServoGripperTest.class);
+      manager.register("DeadReckoningTest",DeadReckoningTest.class);
+      manager.register("winchCode", winchCode.class);
+//manager.register("TouchSensorDrive", TouchSensorDrive.class);
+manager.register("MRRGBExample",MRRGBExample.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
      */
-    manager.register("MR Gyro Test", MRGyroTest.class);
+    //manager.register("MR Gyro Test", MRGyroTest.class);
 
     //manager.register("AdafruitRGBExample", AdafruitRGBExample.class);
     //manager.register("ColorSensorDriver", ColorSensorDriver.class);
