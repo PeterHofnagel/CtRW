@@ -54,13 +54,17 @@ public class DeadReckoningTest extends OpMode {
 	DcMotor motorBackLeft;
 
 	int calls = 0;
+	double right = 1;
+	double left = 1;
 
 
 
-
-	/**
-	 * Constructor
-	 */
+	public void SetPower(){
+		motorFrontRight.setPower(right);
+		motorFrontLeft.setPower(left);
+		motorBackLeft.setPower(left);
+		motorBackRight.setPower(right);
+	}
 	public DeadReckoningTest() {
 
 	}
@@ -106,23 +110,15 @@ public class DeadReckoningTest extends OpMode {
 	@Override
 	public void loop() {
 
-
-
-		calls ++;
+		calls++;
 		telemetry.addData("total calls ", calls);
 		if (calls < 300) {
-			double right = 1;
-			double left = 1;
+			right =1; left = 1;
+			SetPower();}
 
-		// write the values to the motors
-			motorFrontRight.setPower(right);
-			motorFrontLeft.setPower(left);
-			motorBackLeft.setPower(left);
-			motorBackRight.setPower(right);}
-		else {motorFrontRight.setPower(0);
-			motorFrontLeft.setPower(0);
-			motorBackLeft.setPower(0);
-			motorBackRight.setPower(0);
+		else {
+			right = 0; left = 0;
+			SetPower();
 
 		}
 		if (gamepad1.a)
