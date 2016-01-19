@@ -84,7 +84,7 @@ public class AutonomousRed extends OpMode {
         SetPosition();
         if (this.distance > 0)
         {
-            right = 0; left = 0; SetPower();
+            right = 0; left = 0; SetPower(); calls = 0;
         }
         if(this.calls > 350) {
             right = 0.0D;
