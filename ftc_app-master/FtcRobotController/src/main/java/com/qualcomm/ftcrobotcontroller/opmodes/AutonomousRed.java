@@ -90,8 +90,8 @@ public class AutonomousRed extends OpMode {
             right = 0.0D;
             left = 0.0D;
             SetPower();
-            this.rightbaseposition = 0.99D;
-            this.leftbaseposition = 0.99D;
+            this.rightbaseposition = 0.01D;
+            this.leftbaseposition = 0.01D;
             this.rightmidposition = 0.99D;
             this.leftmidpostition = 0.99D;
             SetPosition();
