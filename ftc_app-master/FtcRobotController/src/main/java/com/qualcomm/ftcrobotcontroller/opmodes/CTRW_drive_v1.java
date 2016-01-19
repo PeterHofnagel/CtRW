@@ -196,7 +196,7 @@ public class CTRW_drive_v1 extends OpMode {
             // if the A button is pushed on gamepad1, increment the position of
             // the arm servo.
             servoposition += servoSpeed;
-            servoposition = Range.clip(servoposition, 0.6, 0.95);
+            servoposition = Range.clip(servoposition, 0, 1);
             gripper.setPosition(servoposition);
 
             //value when servo_1 is vertical--0.708
@@ -212,7 +212,7 @@ public class CTRW_drive_v1 extends OpMode {
             // if the Y button is pushed on gamepad1, decrease the position of
             // the arm servo.
             servoposition -= servoSpeed;
-            servoposition = Range.clip(servoposition, 0.6, 0.95);
+            servoposition = Range.clip(servoposition, 0, 1);
             gripper.setPosition(servoposition);
 
         }telemetry.addData("setting gripper to " + servoposition, calls);
