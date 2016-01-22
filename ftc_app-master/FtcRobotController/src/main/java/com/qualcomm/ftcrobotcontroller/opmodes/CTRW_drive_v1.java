@@ -65,7 +65,7 @@ public class CTRW_drive_v1 extends OpMode {
     double baseposition = 0;
     double servoSpeed = .01;
     double clipmin = 0;
-    double clipmax = 1;
+    double clipmax = .7;
     int calls = 0;
 
 
@@ -108,7 +108,7 @@ public class CTRW_drive_v1 extends OpMode {
         gripper = hardwareMap.servo.get("gripper"); //port2
 
 
-        leftmidservo.setDirection(Servo.Direction.REVERSE);
+        rightmidservo.setDirection(Servo.Direction.REVERSE);
         rightbaseservo.setDirection(Servo.Direction.REVERSE);
         calls=0;
         winch = hardwareMap.servo.get("winch");
