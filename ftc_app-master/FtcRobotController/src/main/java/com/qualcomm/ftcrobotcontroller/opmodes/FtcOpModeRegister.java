@@ -77,7 +77,7 @@ public class FtcOpModeRegister implements OpModeRegister {
         manager.register("CTRW_speedtest_v1", CTRW_speedtest_v1.class);
         manager.register("AutonomousRed",AutonomousRed.class);
         manager.register("DeadReckoningTest",DeadReckoningTest.class);
-
+        manager.register("CTRW_AutonomousBlue_V1",CTRW_AutonomousBlue_V1.class);
 
 
     /*
