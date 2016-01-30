@@ -66,9 +66,12 @@ public class CTRW_AutonomousBaseClass_V1 extends OpMode {
     double servoSpeed = .01;
     double clipmin = 0;
     double clipmax = .7;
-    double turnpower = 0;
+    double turnpower = -1;
     int calls = 0;
-
+    int moveforwardcount = 115; //24 inches
+    int firstturncount = 77; //45 degrees
+    int secondmoveforwardcount = 248; //36 inches
+    int secondturncount = 75; //45 degrees
 
 
 
@@ -150,17 +153,17 @@ public class CTRW_AutonomousBaseClass_V1 extends OpMode {
         calls++;
         if((System.currentTimeMillis()- timer) > 25000)
             setMotorPower(0);
-        else if(calls<211)
+        else if(calls<moveforwardcount)
         {
             setMotorPower(1);
         }
-        else if (calls <288)
+        else if (calls <moveforwardcount + firstturncount)
 
             setMotorPowerTurn(turnpower);
 
-        else if (calls <605)
+        else if (calls <firstturncount + moveforwardcount + secondmoveforwardcount)
             setMotorPower(1);
-        else if (calls <758)
+        else if (calls <secondmoveforwardcount + secondturncount + firstturncount +moveforwardcount)
         setMotorPowerTurn(turnpower);
         else setMotorPower(1);
     }
