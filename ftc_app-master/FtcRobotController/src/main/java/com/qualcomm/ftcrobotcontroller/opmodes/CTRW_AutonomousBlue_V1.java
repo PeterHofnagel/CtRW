@@ -47,11 +47,10 @@ public class CTRW_AutonomousBlue_V1 extends CTRW_AutonomousBaseClass_V1 {
 
     public void init() {
 
+    super.init();
+        turnpower = -1;
 
-		/*
-		 *
-		 */
-        turnpower = 1;
+
 
 
     }
