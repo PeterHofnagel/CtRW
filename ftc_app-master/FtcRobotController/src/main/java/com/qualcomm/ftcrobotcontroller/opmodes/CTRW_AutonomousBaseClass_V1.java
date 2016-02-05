@@ -53,20 +53,12 @@ public class CTRW_AutonomousBaseClass_V1 extends OpMode {
     DcMotor motorFrontLeft;
     DcMotor motorBackRight;
     DcMotor motorBackLeft;
-    Servo rightbaseservo;
-    Servo leftbaseservo;
-    Servo rightmidservo;
-    Servo leftmidservo;
-    Servo gripper;
-    Servo winch;
+
     long timer;
-    double servoposition = .75;
-    double midposition = 0;
-    double baseposition = 0;
-    double servoSpeed = .01;
-    double clipmin = 0;
-    double clipmax = .7;
-    double turnpower = -1;
+
+
+
+    double turnpower = 0;
     int calls = 0;
     int moveforwardcount = 115; //24 inches
     int firstturncount = 77; //45 degrees
@@ -99,25 +91,25 @@ public class CTRW_AutonomousBaseClass_V1 extends OpMode {
         motorFrontRight = hardwareMap.dcMotor.get("frontright"); //port1 right
         motorBackLeft = hardwareMap.dcMotor.get("backleft"); //port2 left11a
         motorBackRight = hardwareMap.dcMotor.get("backright"); //port2 right
-
+        setMotorPower(0);
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
 
 
 
-        rightbaseservo = hardwareMap.servo.get("rightbase"); //port1
-        leftbaseservo = hardwareMap.servo.get("leftbase"); //port6
-        rightmidservo = hardwareMap.servo.get("rightmid"); //port3
-        leftmidservo = hardwareMap.servo.get("leftmid"); //port5
-        gripper = hardwareMap.servo.get("gripper"); //port2
+        //rightbaseservo = hardwareMap.servo.get("rightbase"); //port1
+        //leftbaseservo = hardwareMap.servo.get("leftbase"); //port6
+        //rightmidservo = hardwareMap.servo.get("rightmid"); //port3
+        //leftmidservo = hardwareMap.servo.get("leftmid"); //port5
+       // gripper = hardwareMap.servo.get("gripper"); //port2
 
 
-        rightmidservo.setDirection(Servo.Direction.REVERSE);
-        rightbaseservo.setDirection(Servo.Direction.REVERSE);
-        calls=0;
-        winch = hardwareMap.servo.get("winch");
+        //rightmidservo.setDirection(Servo.Direction.REVERSE);
+        //rightbaseservo.setDirection(Servo.Direction.REVERSE);
+       // calls=0;
+       // winch = hardwareMap.servo.get("winch");
 
-        winch.setPosition(0.5);
+       // winch.setPosition(0.5);
 
 
 
@@ -182,86 +174,7 @@ public class CTRW_AutonomousBaseClass_V1 extends OpMode {
         motorBackRight.setPower(-power);
 
     }
-    public void controlMotors()
-    {
-        double throttle = -gamepad1.left_stick_y;
-        double direction = -gamepad1.right_stick_x;
-        double right = throttle - direction;
-        double left = throttle + direction;
-        right = Range.clip(right, -1, 1);
-        left = Range.clip(left, -1, 1);
-        right = scaleInput(right);
-        left = scaleInput(left);
 
-        // write the values to the motors
-        motorFrontRight.setPower(right);
-        motorFrontLeft.setPower(left);
-        motorBackLeft.setPower(left);
-        motorBackRight.setPower(right);
-        //telemetry.addData("Text", "*** Robot Data***");
-        //telemetry.addData("left tgt pwr", "left  pwr: " + String.format("%.2f", left));
-        //telemetry.addData("right tgt pwr", "right pwr: " + String.format("%.2f", right));
-    }
-
-    public void controlArmBase() {
-
-
-        // if left stick is pressed on gamepad2, move upper arm
-        baseposition -= servoSpeed*gamepad2.left_stick_y;
-        baseposition = Range.clip(baseposition, 0.0, 1);
-        rightbaseservo.setPosition(baseposition);
-        leftbaseservo.setPosition(baseposition);
-        telemetry.addData("setting armbase servo to ", baseposition);
-
-    }
-
-    public void controlArmMid() {
-
-        // if right joystick is pushed on gamepad2, move forearm up.
-        midposition -= servoSpeed*gamepad2.right_stick_y;
-        midposition = Range.clip(midposition, clipmin, clipmax);
-        rightmidservo.setPosition(midposition);
-        leftmidservo.setPosition(midposition);
-        telemetry.addData("setting midservos to ", midposition);
-    }
-
-    public void controlGripper() {
-
-        if (gamepad2.left_bumper) {
-            // if the A button is pushed on gamepad1, increment the position of
-            // the arm servo.
-            servoposition += servoSpeed;
-            servoposition = Range.clip(servoposition, 0, 1);
-            gripper.setPosition(servoposition);
-
-            //value when servo_1 is vertical--0.708
-            //value when servo_1 is parallel to the ground--0.15
-
-
-        }telemetry.addData("setting gripper to " + servoposition , calls);
-
-
-
-
-        if (gamepad2.right_bumper) {
-            // if the Y button is pushed on gamepad1, decrease the position of
-            // the arm servo.
-            servoposition -= servoSpeed;
-            servoposition = Range.clip(servoposition, 0, 1);
-            gripper.setPosition(servoposition);
-
-        }telemetry.addData("setting gripper to " + servoposition, calls);
-    }
-
-    public void controlWinch() {
-        double throttlewinch = gamepad2.left_trigger - gamepad2.right_trigger;
-        double winchpower = (throttlewinch/2) + .5;
-
-        winchpower = Range.clip(winchpower,clipmin,clipmax);
-        winch.setPosition(winchpower);
-        telemetry.addData("servo power: ",winchpower);
-        telemetry.addData("throttle: ",throttlewinch);
-    }
 
 
 
