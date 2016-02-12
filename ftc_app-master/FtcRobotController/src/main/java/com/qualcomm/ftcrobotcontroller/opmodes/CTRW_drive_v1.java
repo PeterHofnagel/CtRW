@@ -57,15 +57,15 @@ public class CTRW_drive_v1 extends OpMode {
     Servo leftbaseservo;
     Servo rightmidservo;
     Servo leftmidservo;
-    Servo gripper;
+    Servo wing;
     Servo winch;
 
     double servoposition = .75;
     double midposition = 0;
     double baseposition = 0;
-    double servoSpeed = .01;
+    double servoSpeed = .0025;
     double clipmin = 0;
-    double clipmax = .7;
+    double clipmax = 1;
     int calls = 0;
 
 
@@ -105,7 +105,7 @@ public class CTRW_drive_v1 extends OpMode {
         leftbaseservo = hardwareMap.servo.get("leftbase"); //port6
         rightmidservo = hardwareMap.servo.get("rightmid"); //port3
         leftmidservo = hardwareMap.servo.get("leftmid"); //port5
-        gripper = hardwareMap.servo.get("gripper"); //port2
+        wing = hardwareMap.servo.get("gripper"); //port2
 
 
         rightmidservo.setDirection(Servo.Direction.REVERSE);
@@ -142,7 +142,7 @@ public class CTRW_drive_v1 extends OpMode {
         controlMotors();
         controlArmBase();
         controlArmMid();
-        controlGripper();
+        controlWing();
         controlWinch();
         calls++;
     }
@@ -190,14 +190,14 @@ public class CTRW_drive_v1 extends OpMode {
         telemetry.addData("setting midservos to ", midposition);
     }
 
-    public void controlGripper() {
+    public void controlWing() {
 
         if (gamepad2.left_bumper) {
             // if the A button is pushed on gamepad1, increment the position of
             // the arm servo.
             servoposition += servoSpeed;
             servoposition = Range.clip(servoposition, 0, 1);
-            gripper.setPosition(servoposition);
+            wing.setPosition(servoposition);
 
             //value when servo_1 is vertical--0.708
             //value when servo_1 is parallel to the ground--0.15
@@ -213,7 +213,7 @@ public class CTRW_drive_v1 extends OpMode {
             // the arm servo.
             servoposition -= servoSpeed;
             servoposition = Range.clip(servoposition, 0, 1);
-            gripper.setPosition(servoposition);
+            wing.setPosition(servoposition);
 
         }telemetry.addData("setting gripper to " + servoposition, calls);
     }
@@ -252,8 +252,8 @@ public class CTRW_drive_v1 extends OpMode {
      * the robot more precisely at slower speeds.
      */
     double scaleInput(double dVal)  {
-        double[] scaleArray = { 0.0, 0.05, 0.09, 0.10, 0.12, 0.15, 0.18, 0.24,
-                0.30, 0.36, 0.43, 0.50, 0.60, 0.72, 0.85, 1.00, 1.00 };
+        double[] scaleArray = { 0.0, 0.025, 0.045, 0.05, 0.06, 0.075, 0.12, 0.16,
+                0.20, 0.24, 0.29, 0.34, 0.48, 0.6, 0.77, 1.00, 1.00 };
 
         // get the corresponding index for the scaleInput array.
         int index = (int) (dVal * 16.0);
