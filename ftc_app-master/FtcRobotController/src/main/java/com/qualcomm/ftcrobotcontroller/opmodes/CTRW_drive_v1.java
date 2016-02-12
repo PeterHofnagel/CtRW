@@ -60,7 +60,7 @@ public class CTRW_drive_v1 extends OpMode {
     Servo wing;
     Servo winch;
 
-    double servoposition = .75;
+    double servoposition = 1;
     double midposition = 0;
     double baseposition = 0;
     double servoSpeed = .0025;
@@ -203,7 +203,7 @@ public class CTRW_drive_v1 extends OpMode {
             //value when servo_1 is parallel to the ground--0.15
 
 
-        }telemetry.addData("setting gripper to " + servoposition , calls);
+        }telemetry.addData("setting wing to " + servoposition , calls);
 
 
 
