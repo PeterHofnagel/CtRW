@@ -75,10 +75,12 @@ public class FtcOpModeRegister implements OpModeRegister {
     */
         manager.register("CTRW_drive_v1", CTRW_drive_v1.class);
         manager.register("CTRW_speedtest_v1", CTRW_speedtest_v1.class);
-        manager.register("AutonomousRed",AutonomousRed.class);
+        //manager.register("AutonomousRed",AutonomousRed.class);
         manager.register("DeadReckoningTest",DeadReckoningTest.class);
         manager.register("CTRW_AutonomousBlue_V1",CTRW_AutonomousBlue_V1.class);
-
+        manager.register("CTRW_AutonomousRed_V1",CTRW_AutonomousRed_V1.class);
+        manager.register("CTRW_AutonomousBaseClass_V1",CTRW_AutonomousBaseClass_V1.class);
+        manager.register ("CTRW_Autonomous_LineFollower", CTRW_Autonomous_LineFollower.class);
 
     /*
      * Uncomment any of the following lines if you want to register an op mode.
