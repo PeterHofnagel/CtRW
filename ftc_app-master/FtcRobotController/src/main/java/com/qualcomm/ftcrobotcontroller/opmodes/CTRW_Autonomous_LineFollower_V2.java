@@ -115,7 +115,7 @@ public class CTRW_Autonomous_LineFollower_V2 extends OpMode {
      */
     @Override
     public void loop() {
-
+        calls++;
 		/*
          * Gamepad 1
 		 *
@@ -128,9 +128,9 @@ public class CTRW_Autonomous_LineFollower_V2 extends OpMode {
         // direction: left_stick_x ranges from -1 to 1, where -1 is full left
         // and 1 is full right
 
-        if (!lineFound && calls <1200)
+        if (!lineFound && calls <2200)
         {
-            set_drive_power(.3,.3);
+            set_drive_power(.15,.15);
             if(a_ods_white_tape_detected())
             {
                 lineFound = true;
@@ -179,7 +179,7 @@ public class CTRW_Autonomous_LineFollower_V2 extends OpMode {
             // Is the amount of light detected above the threshold for white
             // tape?
             //
-            if (v_sensor_ods.getLightDetected () > 0.1)
+            if (v_sensor_ods.getLightDetected () > 0.15)
             {
                 l_return = true;
             }
