@@ -106,7 +106,7 @@ public class CTRW_drive_v1 extends OpMode {
         rightmidservo = hardwareMap.servo.get("rightmid"); //port3
         leftmidservo = hardwareMap.servo.get("leftmid"); //port5
         wing = hardwareMap.servo.get("gripper"); //port2
-
+        wing.setPosition(servoposition);
 
         rightmidservo.setDirection(Servo.Direction.REVERSE);
         rightbaseservo.setDirection(Servo.Direction.REVERSE);
