@@ -58,6 +58,7 @@ public class CTRW_Autonomous_LineFollower extends OpMode {
     boolean lineFound = false;
     boolean driveon = false;
     int calls = 0;
+    int callswl = 0;
      OpticalDistanceSensor v_sensor_ods;
     /**
      * Constructor
@@ -86,7 +87,7 @@ public class CTRW_Autonomous_LineFollower extends OpMode {
         motorFrontRight.setDirection(DcMotor.Direction.REVERSE);
         motorBackRight.setDirection(DcMotor.Direction.REVERSE);
         v_sensor_ods = hardwareMap.opticalDistanceSensor.get("distanceSensor");
-
+        v_sensor_ods.enableLed(true);
 
 
         //rightbaseservo = hardwareMap.servo.get("rightbase"); //port1
@@ -127,19 +128,24 @@ public class CTRW_Autonomous_LineFollower extends OpMode {
         // direction: left_stick_x ranges from -1 to 1, where -1 is full left
         // and 1 is full right
 
+        if (callswl >= 180)
+            set_drive_power(0,0);
+        else{
+        set_drive_power(0.3, 0.3);}
+        if (lineFound && callswl <180) {
+            telemetry.addData("Line Found!", "I am on the line!");
+            callswl ++;
 
-        set_drive_power(0.3, 0.3);
-        if (lineFound) {
             if (a_ods_white_tape_detected()) {
-                set_drive_power(0.0, 0.2); driveon = true;
+                set_drive_power(0.0, 0.4);
             }
             //
             // Else a white line has not been detected, so turn right.
             //
             else {
-                set_drive_power(0.2, 0.0);
+                set_drive_power(0.4, 0.0);
             }
-
+            driveon = true;
         }
         else
         {
@@ -147,12 +153,18 @@ public class CTRW_Autonomous_LineFollower extends OpMode {
                 lineFound = true;
         }
         calls++;
-            if (calls >=4488 && driveon)
+            if (calls >=1200 && driveon)
         {
             set_drive_power(0, 0);
         }
         telemetry.addData("Light Value:", v_sensor_ods.getLightDetected());
         telemetry.addData("Calls:", calls);
+        telemetry.addData("Status",v_sensor_ods.status());
+        telemetry.addData("Left Power Front:", motorFrontLeft.getPower());
+        telemetry.addData("Left Power Back:", motorBackLeft.getPower());
+        telemetry.addData("Right Power Front:", motorFrontRight.getPower());
+        telemetry.addData("Right Power Back:", motorBackRight.getPower());
+        telemetry.addData("Calls on white line:",callswl);
     }
 
     boolean a_ods_white_tape_detected ()
@@ -169,7 +181,7 @@ public class CTRW_Autonomous_LineFollower extends OpMode {
             // Is the amount of light detected above the threshold for white
             // tape?
             //
-            if (v_sensor_ods.getLightDetected () > 0.8)
+            if (v_sensor_ods.getLightDetected () > 0.1)
             {
                 l_return = true;
             }
